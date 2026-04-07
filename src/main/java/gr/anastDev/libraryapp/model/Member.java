@@ -34,22 +34,21 @@ public class Member extends AbstractEntity {
     private String firstname;
     private String lastname;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private Set<Book> books = new HashSet<>();
+    @OneToMany(mappedBy = "member")
+    private Set<Borrowed> borrowed = new HashSet<>();
 
     @PrePersist
    public void initializeUUID(){
        if (uuid == null) uuid = UUID.randomUUID().toString();
    }
 
-    public void addBook(Book book) {
-        if (books == null) books = new HashSet<>();
-        books.add(book);
-        book.setMember(this);
+    public void addBorrow(Borrowed b) {
+        borrowed.add(b);
+        b.setMember(this);
     }
 
-    public void removeBook(Book book) {
-        books.remove(book);
-        book.setMember(null);
+    public void removeBorrow(Borrowed b) {
+        borrowed.remove(b);
+        b.setMember(null);
     }
 }

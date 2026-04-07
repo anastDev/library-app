@@ -25,6 +25,7 @@ public class Book extends AbstractEntity{
     @Column(unique = true)
     private String isbn;
 
+    private String title;
     private String author;
     private String genre;
     private String description;
@@ -32,7 +33,16 @@ public class Book extends AbstractEntity{
     private int numberOfPages;
     private int availableCopies;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @OneToMany(mappedBy = "book")
+    private Set<Borrowed> borrowed = new HashSet<>();
+
+    public void addBorrow(Borrowed b) {
+        borrowed.add(b);
+        b.setBook(this);
+    }
+
+    public void removeBorrow(Borrowed b) {
+        borrowed.remove(b);
+        b.setMember(null);
+    }
 }
