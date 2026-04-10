@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LibrarySearch</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0d2744',
+            'navy-light': '#1a3d5c',
+            'navy-border': '#2a5080',
+            gold: '#f5c842',
+            'gold-hover': '#e8b82e',
+            cream: '#f9f6ee',
+            'cream-divider': '#ddd8ca',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-[#0d2744] flex flex-col items-center justify-center px-4 py-8 font-sans">
+
+  <!-- Hero -->
+  <div class="text-center mb-8">
+    <h1 class="text-3xl sm:text-4xl font-medium text-[#f5c842] tracking-tight mb-2">LibrarySearch</h1>
+    <p class="text-[#b5d4f4] text-base">Find books, journals and resources from our collection</p>
+  </div>
+
+  <!-- Card -->
+  <div class="w-full max-w-2xl mx-auto">
+  <div class="bg-[#f9f6ee] rounded-2xl p-8 w-full shadow-[0_8px_32px_rgba(0,0,0,0.35),0_2px_8px_rgba(0,0,0,0.18)]">
+
+    <p class="text-center text-[#0d2744] font-medium text-lg mb-5">Search the catalogue</p>
+
+    <!-- Search row -->
+    <div class="flex flex-col sm:flex-row gap-2">
+      <input
+        type="text"
+        placeholder="Title, author, ISBN, or keyword..."
+        class="flex-1 h-11 rounded-lg border border-[#0d2744] bg-[#0d2744] px-4 text-[#e8f0f8] placeholder-[#6a92b8] text-sm outline-none focus:ring-2 focus:ring-[#0d2744]/40 transition"
+      />
+      <button class="h-11 px-7 rounded-lg bg-[#0d2744] text-[#f5c842] font-semibold text-sm tracking-wide hover:bg-[#1a3d5c] active:scale-95 transition whitespace-nowrap cursor-pointer shadow-md">
+        Search
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <hr class="border-t border-[#ddd8ca] my-6" />
+
+    <!-- Category filters -->
+    <p class="text-xs font-medium text-[#7a6e5a] uppercase tracking-widest mb-3">Browse by category</p>
+    <div class="flex flex-wrap gap-2">
+      <button class="px-4 py-1.5 rounded-full bg-[#0d2744] text-[#f5c842] border border-[#0d2744] text-sm font-medium hover:bg-[#1a3d5c] hover:border-[#1a3d5c] transition cursor-pointer">Fiction</button>
+      <button class="px-4 py-1.5 rounded-full bg-[#0d2744] text-[#f5c842] border border-[#0d2744] text-sm font-medium hover:bg-[#1a3d5c] hover:border-[#1a3d5c] transition cursor-pointer">Romance</button>
+      <button class="px-4 py-1.5 rounded-full bg-[#0d2744] text-[#f5c842] border border-[#0d2744] text-sm font-medium hover:bg-[#1a3d5c] hover:border-[#1a3d5c] transition cursor-pointer">Fantasy</button>
+      <button class="px-4 py-1.5 rounded-full bg-[#0d2744] text-[#f5c842] border border-[#0d2744] text-sm font-medium hover:bg-[#1a3d5c] hover:border-[#1a3d5c] transition cursor-pointer">Science Fiction</button>
+      <button class="px-4 py-1.5 rounded-full bg-[#0d2744] text-[#f5c842] border border-[#0d2744] text-sm font-medium hover:bg-[#1a3d5c] hover:border-[#1a3d5c] transition cursor-pointer">Poetry</button>
+      <button class="px-4 py-1.5 rounded-full bg-[#0d2744] text-[#f5c842] border border-[#0d2744] text-sm font-medium hover:bg-[#1a3d5c] hover:border-[#1a3d5c] transition cursor-pointer">Children</button>
+    </div>
+
+  </div>
+  </div>
+
+  <!-- Footer note -->
+  <p class="mt-6 text-xs text-[#7a92aa] text-center">Over 40,000 titles available &mdash; updated daily</p>
+
+</body>
+</html>
