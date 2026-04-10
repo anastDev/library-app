@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,9 +28,9 @@ public class Book extends AbstractEntity{
     private String author;
     private String genre;
     private String description;
-    private Instant yearOfPublish;
-    private int numberOfPages;
-    private int availableCopies;
+    private Integer yearOfPublish;
+    private Integer numberOfPages;
+    private Integer availableCopies;
 
     @OneToMany(mappedBy = "book")
     private Set<Borrowed> borrowed = new HashSet<>();
