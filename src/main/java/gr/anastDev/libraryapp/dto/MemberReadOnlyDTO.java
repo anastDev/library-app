@@ -14,10 +14,10 @@ import java.time.Instant;
 public class MemberReadOnlyDTO {
 
     private Long id;
-    private Instant createdAt;
-    private Instant updatedAt;
     private String firstname;
     private String lastname;
     private String username;
     private String email;
+    private Instant createdAt;
+    private Instant updatedAt;
 }
