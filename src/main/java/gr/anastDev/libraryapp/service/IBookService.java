@@ -9,7 +9,7 @@ import gr.anastDev.libraryapp.model.Book;
 
 public interface IBookService {
 
-    Book saveBook(BookInsertDTO bookInsertDTO) throws EntityInvalidArgumentException, EntityAlreadyExistsException;
+    Book saveBook(BookInsertDTO bookInsertDTO) throws EntityAlreadyExistsException;
     void updateBook(BookEditDTO dto) throws EntityAlreadyExistsException, EntityInvalidArgumentException, EntityNotFoundException;
     void deleteBookByISBN(String isbn) throws EntityNotFoundException;
 }
