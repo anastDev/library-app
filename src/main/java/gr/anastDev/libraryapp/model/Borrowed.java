@@ -30,5 +30,4 @@ public class Borrowed {
     private Instant borrowedAt;
     private Instant dueDate;
     private Instant returnedAt;
-
 }

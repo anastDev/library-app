@@ -3,6 +3,7 @@ package gr.anastDev.libraryapp.service;
 import gr.anastDev.libraryapp.core.exceptions.EntityInvalidArgumentException;
 import gr.anastDev.libraryapp.core.exceptions.EntityNotFoundException;
 import gr.anastDev.libraryapp.dto.BorrowedInsertDTO;
+import gr.anastDev.libraryapp.dto.BorrowedReadOnlyDTO;
 import gr.anastDev.libraryapp.mapper.Mapper;
 import gr.anastDev.libraryapp.model.Book;
 import gr.anastDev.libraryapp.model.Borrowed;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +35,15 @@ public class BorrowedService implements IBorrowedService {
     @Transactional(rollbackOn = {EntityNotFoundException.class, EntityInvalidArgumentException.class})
     public Borrowed borrowBook(BorrowedInsertDTO dto) throws EntityNotFoundException, EntityInvalidArgumentException {
         try{
-            Member member = memberRepository.findById(dto.getMemberId())
-                    .orElseThrow(() -> new EntityNotFoundException("Member", "Member with id " + dto.getMemberId() + "not found!"));
+            Member member = memberRepository.findByUuid(dto.getMemberUuid())
+                    .orElseThrow(() -> new EntityNotFoundException("Member", "Member with username " + dto.getMemberUuid() + "not found!"));
 
             Book book = bookRepository.findByIsbn(dto.getBookIsbn())
                     .orElseThrow(() -> new EntityNotFoundException("Book", "Book with ISBN " + dto.getBookIsbn() + "not found!"));
+
+            if (book.getAvailableCopies() <= 0) {
+                throw new EntityInvalidArgumentException("Book", "Book with ISBN " + dto.getBookIsbn() + "has no available copies!");
+            }
 
             Instant borrowedAt = Instant.now();
             Instant dueDate = borrowedAt.plus(14, ChronoUnit.DAYS);
@@ -46,11 +53,33 @@ public class BorrowedService implements IBorrowedService {
             book.setAvailableCopies(book.getAvailableCopies() - 1);
 
             borrowedRepository.save(borrowed);
-            log.info("Member id={} borrowed book isbn={}.", dto.getMemberId(), dto.getBookIsbn());
+            log.info("Member uuid={} borrowed book isbn={}.", dto.getMemberUuid(), dto.getBookIsbn());
             return borrowed;
         } catch (EntityNotFoundException e) {
-            log.error("Borrow failed. Entity not found. memberId={}, bookIsbn={}.", dto.getMemberId(), dto.getBookIsbn(), e);
+            log.error("Borrow failed. Entity not found. memberId={}, bookIsbn={}.", dto.getMemberUuid(), dto.getBookIsbn(), e);
             throw e;
         }
+    }
+
+    @Override
+    public List<BorrowedReadOnlyDTO> getBorrowedByMemberUuid(String uuid) throws EntityNotFoundException {
+        Member member = memberRepository.findByUuid(uuid)
+                .orElseThrow(() -> new EntityNotFoundException("Member", "Member with uuid " + uuid + "not found!"));
+
+        List<Borrowed> borrowed = borrowedRepository.findByMember(member);
+        return borrowed.stream()
+                .map(mapper::mapToBorrowedReadOnlyDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BorrowedReadOnlyDTO> getBorrowedByBookIsbn(String isbn) throws EntityNotFoundException {
+        Book book = bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new EntityNotFoundException("Book", "Book with isbn " + isbn + "not found!"));
+
+        List<Borrowed> borrowed = borrowedRepository.findByBook(book);
+        return borrowed.stream()
+                .map(mapper::mapToBorrowedReadOnlyDTO)
+                .collect(Collectors.toList());
     }
 }
