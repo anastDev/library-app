@@ -14,6 +14,7 @@ import java.time.Instant;
 public class MemberReadOnlyDTO {
 
     private Long id;
+    private String uuid;
     private String firstname;
     private String lastname;
     private String username;

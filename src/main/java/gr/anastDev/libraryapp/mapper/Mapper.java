@@ -1,9 +1,6 @@
 package gr.anastDev.libraryapp.mapper;
 
-import gr.anastDev.libraryapp.dto.BookInsertDTO;
-import gr.anastDev.libraryapp.dto.BookReadOnlyDTO;
-import gr.anastDev.libraryapp.dto.BorrowedReadOnlyDTO;
-import gr.anastDev.libraryapp.dto.MemberReadOnlyDTO;
+import gr.anastDev.libraryapp.dto.*;
 import gr.anastDev.libraryapp.model.Book;
 import gr.anastDev.libraryapp.model.Borrowed;
 import gr.anastDev.libraryapp.model.Member;
@@ -45,9 +42,23 @@ public class Mapper {
         );
     }
 
+    public Member mapToMemberEntity(MemberInsertDTO dto) {
+        return new Member(
+                null,
+                null,
+                dto.getEmail(),
+                dto.getUsername(),
+                null,
+                dto.getFirstname(),
+                dto.getLastname(),
+                new HashSet<>()
+        );
+    }
+
     public MemberReadOnlyDTO mapToMemberReadOnlyDTO(Member member) {
         return new MemberReadOnlyDTO(
                 member.getId(),
+                member.getUuid(),
                 member.getFirstname(),
                 member.getLastname(),
                 member.getUsername(),
