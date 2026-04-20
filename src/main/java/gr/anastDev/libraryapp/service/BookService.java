@@ -5,6 +5,7 @@ import gr.anastDev.libraryapp.core.exceptions.EntityInvalidArgumentException;
 import gr.anastDev.libraryapp.core.exceptions.EntityNotFoundException;
 import gr.anastDev.libraryapp.dto.BookEditDTO;
 import gr.anastDev.libraryapp.dto.BookInsertDTO;
+import gr.anastDev.libraryapp.dto.BookReadOnlyDTO;
 import gr.anastDev.libraryapp.mapper.Mapper;
 import gr.anastDev.libraryapp.model.Book;
 import gr.anastDev.libraryapp.repository.BookRepository;
@@ -12,6 +13,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +27,26 @@ public class BookService implements IBookService{
 
 
     @Override
+    public List<BookReadOnlyDTO> getAllBooks() {
+        List<Book> books = bookRepository.findAll();
+
+        return books.stream()
+                .map(mapper::mapToBookReadOnlyDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public BookReadOnlyDTO getBookByISBN(String isbn) throws EntityNotFoundException {
+       Book book = bookRepository.findByIsbn(isbn)
+               .orElseThrow(() -> new EntityNotFoundException("Book", "Book with ISBN " + isbn + "not found!"));
+       return mapper.mapToBookReadOnlyDTO(book);
+    }
+
+    @Override
     @Transactional(rollbackOn = EntityAlreadyExistsException.class)
     public Book saveBook(BookInsertDTO dto) throws  EntityAlreadyExistsException {
       try {
-          if(dto.getIsbn() != null && bookRepository.findByIsbn(dto.getIsbn()).isPresent()) {
+          if (dto.getIsbn() != null && bookRepository.findByIsbn(dto.getIsbn()).isPresent()) {
               throw new EntityAlreadyExistsException("Book", "Book with ISBN " + dto.getIsbn() + "already exists.");
           }
 
@@ -49,8 +69,9 @@ public class BookService implements IBookService{
 
             if(!book.getIsbn().equals(dto.getIsbn())) {
                 if(bookRepository.findByIsbn(dto.getIsbn()).isPresent()) {
-                    book.setIsbn(dto.getIsbn());
-                } else throw new EntityAlreadyExistsException("Book", "Book with ISBN " + dto.getIsbn() + "already exists.");
+                    throw new EntityAlreadyExistsException("Book", "Book with ISBN " + dto.getIsbn() + "already exists.");
+                }
+                book.setIsbn(dto.getIsbn());
             }
 
             book.setTitle(dto.getTitle());
@@ -85,6 +106,7 @@ public class BookService implements IBookService{
             log.info("Book with ISBN={} deleted!", isbn);
         } catch (EntityNotFoundException e) {
             log.error("Delete failed for book with isbn={}. Book not found.", isbn, e);
+            throw e;
         }
     }
 }
