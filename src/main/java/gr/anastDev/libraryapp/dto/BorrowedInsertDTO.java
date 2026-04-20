@@ -14,7 +14,7 @@ import lombok.Setter;
 public class BorrowedInsertDTO {
 
     @NotNull
-    private Long memberId;
+    private String memberUuid;
 
     @NotBlank
     private String bookIsbn;
