@@ -37,3 +37,5 @@ out/
 .vscode/
 
 .claude
+.env
+.application-dev.properties
