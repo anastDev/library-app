@@ -1,5 +1,6 @@
 package gr.anastDev.libraryapp.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +17,9 @@ public class BookInsertDTO {
     @Size(min = 10, max = 17)
     private String isbn;
 
+    private String thumbnail;
+    private String smallThumbnail;
+
     @NotBlank
     @Size(min = 1, max = 200)
     private String title;
@@ -28,8 +32,8 @@ public class BookInsertDTO {
     @Size(min = 1, max = 50)
     private String genre;
 
+    @Column(columnDefinition = "TEXT")
     @NotBlank
-    @Size(max = 2000)
     private String description;
 
     @NotNull

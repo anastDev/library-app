@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class BookEditDTO {
+public class BookUpdateDTO {
 
     @NotBlank
     @Size(min = 10, max = 17)
