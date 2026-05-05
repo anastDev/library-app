@@ -1,24 +1,10 @@
 package gr.anastDev.libraryapp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Builder;
 
-import java.time.Instant;
-
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-public class MemberReadOnlyDTO {
-
-    private Long id;
-    private String uuid;
-    private String firstname;
-    private String lastname;
-    private String username;
-    private String email;
-    private Instant createdAt;
-    private Instant updatedAt;
-}
+@Builder
+public record MemberReadOnlyDTO(
+        Long id,
+        String uuid,
+        UserReadOnlyDTO userReadOnlyDTO
+) {}

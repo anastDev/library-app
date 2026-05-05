@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
@@ -16,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "members")
-public class Member extends AbstractEntity {
+public class Member extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,16 +23,9 @@ public class Member extends AbstractEntity {
     @Column(unique = true)
     private String uuid;
 
-    @Column(unique = true)
-    private String email;
-
-    @Column(unique = true)
-    private String username;
-
-    private String password;
-
-    private String firstname;
-    private String lastname;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @OneToMany(mappedBy = "member")
     private Set<Borrowed> borrowed = new HashSet<>();
