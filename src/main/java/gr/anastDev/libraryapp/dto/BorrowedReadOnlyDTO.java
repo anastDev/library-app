@@ -1,7 +1,5 @@
 package gr.anastDev.libraryapp.dto;
 
-import gr.anastDev.libraryapp.model.Book;
-import gr.anastDev.libraryapp.model.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +14,12 @@ import java.time.Instant;
 public class BorrowedReadOnlyDTO {
 
     private Long id;
-    private Member member;
-    private Book book;
+    private String memberUuid;
+    private String username;
+    private String firstname;
+    private String lastname;
+    private String bookIsbn;
+    private String bookTitle;
     private Instant borrowedAt;
     private Instant dueDate;
     private Instant returnedAt;

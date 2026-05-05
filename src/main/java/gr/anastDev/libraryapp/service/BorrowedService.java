@@ -36,13 +36,13 @@ public class BorrowedService implements IBorrowedService {
     public Borrowed borrowBook(BorrowedInsertDTO dto) throws EntityNotFoundException, EntityInvalidArgumentException {
         try{
             Member member = memberRepository.findByUuid(dto.getMemberUuid())
-                    .orElseThrow(() -> new EntityNotFoundException("Member", "Member with username " + dto.getMemberUuid() + "not found!"));
+                    .orElseThrow(() -> new EntityNotFoundException("Member", "Member with username " + dto.getMemberUuid() + " not found!"));
 
             Book book = bookRepository.findByIsbn(dto.getBookIsbn())
-                    .orElseThrow(() -> new EntityNotFoundException("Book", "Book with ISBN " + dto.getBookIsbn() + "not found!"));
+                    .orElseThrow(() -> new EntityNotFoundException("Book", "Book with ISBN " + dto.getBookIsbn() + " not found!"));
 
             if (book.getAvailableCopies() <= 0) {
-                throw new EntityInvalidArgumentException("Book", "Book with ISBN " + dto.getBookIsbn() + "has no available copies!");
+                throw new EntityInvalidArgumentException("Book", "Book with ISBN " + dto.getBookIsbn() + " has no available copies!");
             }
 
             Instant borrowedAt = Instant.now();
@@ -62,9 +62,10 @@ public class BorrowedService implements IBorrowedService {
     }
 
     @Override
+    @Transactional(rollbackOn = EntityNotFoundException.class)
     public List<BorrowedReadOnlyDTO> getBorrowedByMemberUuid(String uuid) throws EntityNotFoundException {
         Member member = memberRepository.findByUuid(uuid)
-                .orElseThrow(() -> new EntityNotFoundException("Member", "Member with uuid " + uuid + "not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Member", "Member with uuid " + uuid + " not found!"));
 
         List<Borrowed> borrowed = borrowedRepository.findByMember(member);
         return borrowed.stream()
@@ -73,9 +74,10 @@ public class BorrowedService implements IBorrowedService {
     }
 
     @Override
+    @Transactional(rollbackOn = EntityNotFoundException.class)
     public List<BorrowedReadOnlyDTO> getBorrowedByBookIsbn(String isbn) throws EntityNotFoundException {
         Book book = bookRepository.findByIsbn(isbn)
-                .orElseThrow(() -> new EntityNotFoundException("Book", "Book with isbn " + isbn + "not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Book", "Book with isbn " + isbn + " not found!"));
 
         List<Borrowed> borrowed = borrowedRepository.findByBook(book);
         return borrowed.stream()
