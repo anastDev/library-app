@@ -41,10 +41,11 @@ public class SecurityConfiguration {
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers(HttpMethod.POST, "/api/members").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/books").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/books/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/members").permitAll()
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
@@ -53,7 +54,11 @@ public class SecurityConfiguration {
                                 "/swagger-resources/**",
                                 "/configuration/**"
                         ).permitAll()
-                        .requestMatchers("/api/members/**").hasAnyRole("ADMIN", "MEMBER")
+                        .requestMatchers(HttpMethod.POST, "/api/borrowed").hasAnyRole("ADMIN", "MEMBER")
+                        .requestMatchers(HttpMethod.POST, "/api/books").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/books").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
+                        .requestMatchers("/api/members/**").hasAnyRole("ADMIN")
                         .requestMatchers("/**").authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
