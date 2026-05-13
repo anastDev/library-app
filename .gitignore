@@ -36,6 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
-.claude
 .env
 .application-dev.properties
+*.log
+tmp/
+temp/
+.cache/
