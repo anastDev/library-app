@@ -54,7 +54,7 @@ public class BookController {
     @GetMapping
     public ResponseEntity<Page<BookReadOnlyDTO>> getPaginatedBooks(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "10") int size
     ) {
         Page<BookReadOnlyDTO> bookPage = bookService.getPaginatedBooks(page, size);
 
