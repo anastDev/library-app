@@ -2,6 +2,8 @@ package gr.anastDev.libraryapp.service;
 
 import gr.anastDev.libraryapp.core.exceptions.EntityInvalidArgumentException;
 import gr.anastDev.libraryapp.core.exceptions.EntityNotFoundException;
+import gr.anastDev.libraryapp.dto.BookReadOnlyDTO;
+import gr.anastDev.libraryapp.dto.BookUpdateDTO;
 import gr.anastDev.libraryapp.dto.BorrowedInsertDTO;
 import gr.anastDev.libraryapp.dto.BorrowedReadOnlyDTO;
 import gr.anastDev.libraryapp.mapper.Mapper;
@@ -32,7 +34,7 @@ public class BorrowedService implements IBorrowedService {
     private final Mapper mapper;
 
     @Override
-    @Transactional(rollbackOn = {EntityNotFoundException.class, EntityInvalidArgumentException.class})
+    @Transactional(rollbackOn = EntityNotFoundException.class)
     public Borrowed borrowBook(BorrowedInsertDTO dto) throws EntityNotFoundException, EntityInvalidArgumentException {
         try{
             Member member = memberRepository.findByUuid(dto.getMemberUuid())
@@ -59,6 +61,39 @@ public class BorrowedService implements IBorrowedService {
             log.error("Borrow failed. Entity not found. memberId={}, bookIsbn={}.", dto.getMemberUuid(), dto.getBookIsbn(), e);
             throw e;
         }
+    }
+
+    @Override
+    @Transactional(rollbackOn = {EntityNotFoundException.class, EntityInvalidArgumentException.class})
+    public BorrowedReadOnlyDTO returnBook(String memberUuid, String bookIsbn) throws EntityNotFoundException, EntityInvalidArgumentException{
+      try {
+          Member member = memberRepository.findByUuid(memberUuid)
+                  .orElseThrow(() -> new EntityNotFoundException("Member", "Member with uuid" + memberUuid + " not found!"));
+
+          Book book = bookRepository.findByIsbn(bookIsbn)
+                  .orElseThrow(() -> new EntityNotFoundException("Book",
+                          "Book with isbn " + bookIsbn + " not found."));
+
+          Borrowed borrowed = borrowedRepository
+                  .findByMemberAndBook(member, book)
+                  .orElseThrow(() -> new EntityInvalidArgumentException("Borrowed",
+                          "No active borrow found for member " + memberUuid +
+                                  " and book " + bookIsbn + "."));
+
+          borrowed.setReturnedAt(Instant.now());
+          book.setAvailableCopies(book.getAvailableCopies() + 1);
+          borrowedRepository.save(borrowed);
+          log.info("Member uuid={} returned book isbn={}.", memberUuid, bookIsbn);
+
+          return mapper.mapToBorrowedReadOnlyDTO(borrowed);
+
+      } catch (EntityNotFoundException e) {
+          log.error("Return failed. memberUuid={}, bookIsbn={}.", memberUuid, bookIsbn, e);
+          throw e;
+      } catch (EntityInvalidArgumentException e) {
+          log.error("Return failed. No active borrow. memberUuid={}, bookIsbn={}.", memberUuid, bookIsbn, e);
+          throw e;
+      }
     }
 
     @Override

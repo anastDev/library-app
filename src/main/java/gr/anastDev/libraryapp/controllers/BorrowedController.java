@@ -119,4 +119,12 @@ public class BorrowedController {
         Borrowed borrowed = borrowedService.borrowBook(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToBorrowedReadOnlyDTO(borrowed));
     }
+
+    @PostMapping("/return")
+    public ResponseEntity<BorrowedReadOnlyDTO> returnBook(
+            @RequestParam String uuid,
+            @RequestParam String isbn
+    ) throws EntityNotFoundException, EntityInvalidArgumentException {
+        return ResponseEntity.ok(borrowedService.returnBook(uuid, isbn));
+    }
 }
