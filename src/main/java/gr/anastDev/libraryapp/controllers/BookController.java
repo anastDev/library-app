@@ -13,8 +13,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +41,26 @@ public class BookController {
     @GetMapping
     public ResponseEntity<List<BookReadOnlyDTO>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
+    }
+
+    @Operation(
+            summary = "Get all books paginated",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "Books retrieved successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = BookReadOnlyDTO.class))
+                    ),
+            }
+    )
+    @GetMapping
+    public ResponseEntity<Page<BookReadOnlyDTO>> getPaginatedBooks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            Model model
+    ) {
+        Page<BookReadOnlyDTO> bookPage = bookService.getPaginatedBooks(page, size);
+
+        return ResponseEntity.ok(bookPage);
     }
 
 

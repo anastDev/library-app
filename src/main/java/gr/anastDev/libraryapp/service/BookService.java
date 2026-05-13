@@ -11,6 +11,10 @@ import gr.anastDev.libraryapp.repository.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -107,5 +111,13 @@ public class BookService implements IBookService{
             log.error("Delete failed for book with isbn={}. Book not found.", isbn, e);
             throw e;
         }
+    }
+
+    @Override
+    public Page<BookReadOnlyDTO> getPaginatedBooks(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
+        Page<Book> bookPage = bookRepository.findAll(pageable);
+        log.debug("Get paginated books were returned successfully with page={} and size={}", page, size);
+        return bookPage.map(mapper::mapToBookReadOnlyDTO);
     }
 }
