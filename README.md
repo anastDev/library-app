@@ -4,8 +4,7 @@ A RESTful backend API for managing a library system — built with **Java** and 
 following production-style architecture and best practices.
 
 The system supports role-based access control, book inventory management, member
-registration and a borrowing workflow. A React frontend is currently in development
-and will connect to the deployed backend.
+registration and a borrowing workflow. A [React frontend](http://localhost:5173/react-projects-hub/#/projects/library-app) connects to the deployed backend.
 
 ---
 
@@ -67,12 +66,12 @@ Authentication is handled via JWT. Role-based access is enforced at the endpoint
 
 ### Books — `/api/books`
 
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| GET | `/api/books` | Get all books | Public |
-| GET | `/api/books/{isbn}` | Get book by ISBN | Public |
-| POST | `/api/books` | Add a new book | 🔑 Admin |
-| PUT | `/api/books` | Update a book | 🔑 Admin |
+| Method | Endpoint | Description           | Auth |
+|---|---|-----------------------|---|
+| GET | `/api/books` | Get books paginated   | Public |
+| GET | `/api/books/{isbn}` | Get book by ISBN      | Public |
+| POST | `/api/books` | Add a new book        | 🔑 Admin |
+| PUT | `/api/books` | Update a book         | 🔑 Admin |
 | DELETE | `/api/books/{isbn}` | Delete a book by ISBN | 🔑 Admin |
 
 ### Members — `/api/members`
@@ -118,5 +117,9 @@ Swagger UI is available [here](http://localhost:8080/swagger-ui/index.html)
 - [x] JWT authentication and role-based access control
 - [x] Swagger / OpenAPI documentation
 - [x] JPA Auditing (created/updated timestamps)
+- [x] Deployed on Railway with managed MySQL database
+- [x] React frontend connected to deployed backend
 - [ ] Return book endpoint (reduces available copies)
-- [ ] React frontend connected to deployed backend
+- [ ] Return book endpoint — increments available copies and records the return date on the `Borrowed` entity
+- [ ] Overdue borrow detection — flag borrows where `dueDate` has passed and `returnedAt` is still null
+- [ ] Member borrow history page in the React frontend
