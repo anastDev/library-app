@@ -74,7 +74,7 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173", "https://anastdev.github.io/react-projects-hub/"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173", "https://anastdev.github.io"));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
