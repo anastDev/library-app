@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
 
     Optional<Book> findByIsbn(String isbn);
-    List<Book> findByTitle(String title);
+    Optional<List<Book>> findByTitleContainingIgnoreCase(String title);
     List<Book> findByGenre(String genre);
 }

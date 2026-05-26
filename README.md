@@ -4,7 +4,7 @@ A RESTful backend API for managing a library system — built with **Java** and 
 following production-style architecture and best practices.
 
 The system supports role-based access control, book inventory management, member
-registration and a borrowing workflow. A [React frontend](http://localhost:5173/react-projects-hub/#/projects/library-app) connects to the deployed backend.
+registration and a borrowing workflow. A [React frontend](https://anastdev.github.io/react-projects-hub/#/projects/library-app) connects to the deployed backend.
 
 ---
 
@@ -76,19 +76,20 @@ Authentication is handled via JWT. Role-based access is enforced at the endpoint
 
 ### Members — `/api/members`
 
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
+| Method | Endpoint | Description | Auth     |
+|---|---|---|----------|
 | GET | `/api/members` | Get all members | 🔑 Admin |
-| POST | `/api/members` | Register a new member | 🔑 Admin |
+| POST | `/api/members` | Register a new member | Public   |
 | DELETE | `/api/members/{uuid}` | Delete a member | 🔑 Admin |
 
 ### Borrowed — `/api/borrowed`
 
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
+| Method | Endpoint                      | Description                  | Auth |
+|---|-------------------------------|------------------------------|---|
 | GET | `/api/borrowed/member/{uuid}` | Get borrowed books by member | 🔑 Admin / Member |
-| GET | `/api/borrowed/book/{isbn}` | Get borrow history by book | 🔑 Admin |
-| POST | `/api/borrowed` | Borrow a book | 📖 Member |
+| GET | `/api/borrowed/book/{isbn}`   | Get borrow history by book   | 🔑 Admin |
+| POST | `/api/borrowed`               | Borrow a book                | 📖 Member |
+| POST | `/api/borrowed/return`        | Return a book                | 📖 Member |
 
 ---
 
@@ -119,7 +120,8 @@ Swagger UI is available [here](http://localhost:8080/swagger-ui/index.html)
 - [x] JPA Auditing (created/updated timestamps)
 - [x] Deployed on Railway with managed MySQL database
 - [x] React frontend connected to deployed backend
-- [ ] Return book endpoint (reduces available copies)
-- [ ] Return book endpoint — increments available copies and records the return date on the `Borrowed` entity
+- [x] Return book endpoint (reduces available copies)
+- [x] Return book endpoint — increments available copies and records the return date on the `Borrowed` entity
 - [ ] Overdue borrow detection — flag borrows where `dueDate` has passed and `returnedAt` is still null
+- [ ] Write some JUnit test 
 - [ ] Member borrow history page in the React frontend

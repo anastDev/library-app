@@ -8,10 +8,12 @@ import gr.anastDev.libraryapp.mapper.Mapper;
 import gr.anastDev.libraryapp.model.Book;
 import gr.anastDev.libraryapp.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -41,6 +44,32 @@ public class BookController {
 //    public ResponseEntity<List<BookReadOnlyDTO>> getAllBooks() {
 //        return ResponseEntity.ok(bookService.getAllBooks());
 //    }
+
+    @Operation(
+            summary = "Get books by title",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "Books retrieved successfully",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = BookReadOnlyDTO.class))
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404", description = "Book not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseMessageDTO.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500", description = "Internal Server Error",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseMessageDTO.class))
+                    ),
+            }
+    )
+    @GetMapping("/title")
+    public ResponseEntity<List<BookReadOnlyDTO>> getBooksByTitle(@RequestParam("bookName") String bookName) throws EntityNotFoundException {
+        List<BookReadOnlyDTO> dto = bookService.getBooksByTitle(bookName);
+        return ResponseEntity.ok(dto);
+    }
 
     @Operation(
             summary = "Get all books paginated",
@@ -99,7 +128,7 @@ public class BookController {
     }
 
     @Operation(
-            summary = "Get a specific book",
+            summary = "Get a specific book by their ISBN",
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "Book retrieved successfully",
@@ -113,15 +142,6 @@ public class BookController {
                             responseCode = "500", description = "Internal Server Error",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseMessageDTO.class))
                     ),
-//                    @ApiResponse(
-//                            responseCode = "401", description = "Unauthorized",
-//                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseMessageDTO.class)
-//                            )
-//                    ),
-//                    @ApiResponse(
-//                            responseCode = "403", description = "Access Denied",
-//                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseMessageDTO.class))
-//                    )
             }
     )
     @GetMapping("/{isbn}")

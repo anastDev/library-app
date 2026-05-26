@@ -4,13 +4,14 @@ import gr.anastDev.libraryapp.model.Book;
 import gr.anastDev.libraryapp.model.Borrowed;
 import gr.anastDev.libraryapp.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BorrowedRepository extends JpaRepository<Borrowed, Long> {
+public interface BorrowedRepository extends JpaRepository<Borrowed, Long>, JpaSpecificationExecutor<Borrowed> {
     List<Borrowed> findByMember(Member member);
     List<Borrowed> findByBook(Book book);
     Optional<Borrowed> findByMemberAndBook(Member member, Book book);

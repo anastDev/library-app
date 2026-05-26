@@ -46,6 +46,18 @@ public class BookService implements IBookService{
     }
 
     @Override
+    public List<BookReadOnlyDTO> getBooksByTitle(String title) throws EntityNotFoundException {
+       List<Book> books = bookRepository.findByTitleContainingIgnoreCase(title)
+               .filter(list -> !list.isEmpty())
+               .orElseThrow(() -> new EntityNotFoundException("Book", "Book with title: " + title + " not found!"));
+
+       return books.stream()
+               .map(mapper::mapToBookReadOnlyDTO)
+               .collect(Collectors.toList());
+    }
+
+
+    @Override
     @Transactional(rollbackOn = EntityAlreadyExistsException.class)
     public Book saveBook(BookInsertDTO dto) throws  EntityAlreadyExistsException {
       try {

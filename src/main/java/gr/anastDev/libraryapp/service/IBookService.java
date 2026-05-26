@@ -1,7 +1,6 @@
 package gr.anastDev.libraryapp.service;
 
 import gr.anastDev.libraryapp.core.exceptions.EntityAlreadyExistsException;
-import gr.anastDev.libraryapp.core.exceptions.EntityInvalidArgumentException;
 import gr.anastDev.libraryapp.core.exceptions.EntityNotFoundException;
 import gr.anastDev.libraryapp.dto.BookUpdateDTO;
 import gr.anastDev.libraryapp.dto.BookInsertDTO;
@@ -15,6 +14,7 @@ public interface IBookService {
 
     List<BookReadOnlyDTO> getAllBooks();
     BookReadOnlyDTO getBookByISBN(String isbn) throws EntityNotFoundException;
+    List<BookReadOnlyDTO> getBooksByTitle(String title) throws EntityNotFoundException;
     Book saveBook(BookInsertDTO bookInsertDTO) throws EntityAlreadyExistsException;
     void updateBook(BookUpdateDTO dto) throws EntityAlreadyExistsException, EntityNotFoundException;
     void deleteBookByISBN(String isbn) throws EntityNotFoundException;

@@ -38,7 +38,7 @@ public class BorrowedService implements IBorrowedService {
     public Borrowed borrowBook(BorrowedInsertDTO dto) throws EntityNotFoundException, EntityInvalidArgumentException {
         try{
             Member member = memberRepository.findByUuid(dto.getMemberUuid())
-                    .orElseThrow(() -> new EntityNotFoundException("Member", "Member with username " + dto.getMemberUuid() + " not found!"));
+                    .orElseThrow(() -> new EntityNotFoundException("Member", "Member with uuid " + dto.getMemberUuid() + " not found!"));
 
             Book book = bookRepository.findByIsbn(dto.getBookIsbn())
                     .orElseThrow(() -> new EntityNotFoundException("Book", "Book with ISBN " + dto.getBookIsbn() + " not found!"));
