@@ -66,12 +66,13 @@ Authentication is handled via JWT. Role-based access is enforced at the endpoint
 
 ### Books — `/api/books`
 
-| Method | Endpoint | Description           | Auth |
-|---|---|-----------------------|---|
-| GET | `/api/books` | Get books paginated   | Public |
+| Method | Endpoint            | Description           | Auth |
+|---|---------------------|-----------------------|---|
+| GET | `/api/books`        | Get books paginated   | Public |
+| GET | `/api/books/title`  | Get books by title    | Public |
 | GET | `/api/books/{isbn}` | Get book by ISBN      | Public |
-| POST | `/api/books` | Add a new book        | 🔑 Admin |
-| PUT | `/api/books` | Update a book         | 🔑 Admin |
+| POST | `/api/books`        | Add a new book        | 🔑 Admin |
+| PUT | `/api/books`        | Update a book         | 🔑 Admin |
 | DELETE | `/api/books/{isbn}` | Delete a book by ISBN | 🔑 Admin |
 
 ### Members — `/api/members`
@@ -122,6 +123,7 @@ Swagger UI is available [here](http://localhost:8080/swagger-ui/index.html)
 - [x] React frontend connected to deployed backend
 - [x] Return book endpoint (reduces available copies)
 - [x] Return book endpoint — increments available copies and records the return date on the `Borrowed` entity
+- [x] Search books by title (partial, case-insensitive) with frontend integration
 - [ ] Overdue borrow detection — flag borrows where `dueDate` has passed and `returnedAt` is still null
 - [ ] Write some JUnit test 
 - [ ] Member borrow history page in the React frontend
