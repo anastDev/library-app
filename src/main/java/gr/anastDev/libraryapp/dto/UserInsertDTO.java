@@ -12,7 +12,7 @@ public record UserInsertDTO (
         @NotBlank(message = "Firstname is required")
         String firstname,
 
-    @NotEmpty(message = "Lastname is required")
+    @NotBlank(message = "Lastname is required")
     String lastname,
 
     @NotBlank(message = "Username is required")
